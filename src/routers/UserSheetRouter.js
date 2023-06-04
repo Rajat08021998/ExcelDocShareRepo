@@ -194,7 +194,8 @@ router.put("/doc/list/:id", async (req, res) => {
     else res.status(404).send({ status: "failed", result: `Document cannot be updated` });
   } catch (error) {
     // console.log("=======ERROR++++>", error);
-    res.status(500).send({ status: "failed", result: `Error in updated` });
+    res.status(500).send({ status: "failed", 
+    result: `Error in updated` });
   }
 });
 module.exports = router;
