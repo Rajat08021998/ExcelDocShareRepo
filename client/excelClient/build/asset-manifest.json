@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/static/css/main.76b908d6.css",
+    "main.js": "/static/js/main.ffe069fa.js",
+    "static/js/787.3ba2e405.chunk.js": "/static/js/787.3ba2e405.chunk.js",
+    "index.html": "/index.html",
+    "static/media/addUser.svg": "/static/media/addUser.2c66ad81b6d41163424f3cf50840f8ed.svg",
+    "static/media/excelIcon.svg": "/static/media/excelIcon.5eafd140172f5ba7f26cf5ce2fd7ce39.svg",
+    "static/media/view.svg": "/static/media/view.463f70d0e09ee2b88af07ca95d091ba9.svg",
+    "static/media/user.svg": "/static/media/user.9575523363b71d81d340f7953b0988e0.svg",
+    "static/media/update.svg": "/static/media/update.1a836f10bfe23384223436cdbb34b634.svg",
+    "static/media/edit.svg": "/static/media/edit.4fa02ba3eeb22ca444b3fa80117773ac.svg",
+    "static/media/download.svg": "/static/media/download.951e595cb68e6361fc6a7dc5d5fadd34.svg",
+    "static/media/save.svg": "/static/media/save.d0e96cbf4e7bfd0fe90556ae6f291330.svg",
+    "static/media/notification.svg": "/static/media/notification.080ca54388ef7764fccfb34ce64094a3.svg",
+    "static/media/deleteButton.svg": "/static/media/deleteButton.1129c53a10f3c716357028ea030e9d23.svg",
+    "static/media/back.svg": "/static/media/back.c5b915e1ea48ad9df14bdec073866d6b.svg",
+    "static/media/addButton.svg": "/static/media/addButton.376e9b6a44e5b3142f1239a3cc8504d0.svg",
+    "main.76b908d6.css.map": "/static/css/main.76b908d6.css.map",
+    "main.ffe069fa.js.map": "/static/js/main.ffe069fa.js.map",
+    "787.3ba2e405.chunk.js.map": "/static/js/787.3ba2e405.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.76b908d6.css",
+    "static/js/main.ffe069fa.js"
+  ]
+}

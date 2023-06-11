@@ -6,7 +6,6 @@
 
 // })
 
-
 // const User=mongoose.model('User',{
 //     name :{
 //         type:String
@@ -28,13 +27,11 @@
 //     age:'Yooo'
 // })
 
-
 // me.save().then(() =>{
 //     console.log(me);
 // }).catch((error)=>{
 //     console.log('Error',error);
 // })
-
 
 //Practice
 // const mongoose=require('mongoose')
@@ -44,7 +41,6 @@
 //     useCreateIndex:true
 
 // })
-
 
 // const Tasks=mongoose.model('Tasks',{
 //     description :{
@@ -66,8 +62,6 @@
 //     console.log(error);
 // })
 
-
-
 //Applying Validation in Users Model
 //1 applying predefine validation i.e required
 // const mongoose=require('mongoose')
@@ -77,7 +71,6 @@
 //     useCreateIndex:true
 
 // })
-
 
 // const User=mongoose.model('User',{
 //     name :{
@@ -91,7 +84,7 @@
 
 // //in this we pass the nothing in new user and get the error bcz we make name field as required
 // // const me=new User({
-    
+
 // // })
 
 // //in this we only provide name only
@@ -99,14 +92,13 @@
 //     name:'Raj'
 // })
 
-
 // me.save().then(() =>{
 //     console.log(me);
 // }).catch((error)=>{
 //     console.log('Error',error);
 // })
 
-//2 Making Custom validation 
+//2 Making Custom validation
 // const mongoose=require('mongoose')
 
 // mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api',{
@@ -114,7 +106,6 @@
 //     useCreateIndex:true
 
 // })
-
 
 // const User=mongoose.model('User',{
 //     name :{
@@ -131,12 +122,10 @@
 //     }
 // })
 
-
 // //in this we only provide name only not age so ther is not any problem
 // // const me=new User({
 // //     name:'Raj'
 // // })
-
 
 // //but in given below we provide the validation so we get the error
 // const me=new User({
@@ -150,7 +139,6 @@
 //     console.log('Error',error);
 // })
 
-
 //3 Using npm Validator Library
 // const mongoose=require('mongoose')
 // const validator =require('validator')
@@ -159,7 +147,6 @@
 //     useCreateIndex:true
 
 // })
-
 
 // const User=mongoose.model('User',{
 //     name :{
@@ -185,14 +172,11 @@
 //     }
 // })
 
-
-
 // //but in given below we provide the validation so we get the error for email
 // // const me=new User({
 // //     name:'Raj',
 // //     email:'mike@'
 // // })
-
 
 // const me=new User({
 //     name:'Raj',
@@ -205,7 +189,6 @@
 //     console.log('Error',error);
 // })
 
-
 //Applying Some more preDefine Validation in Mongoose
 //trim,default,lowercase
 // const mongoose=require('mongoose')
@@ -215,7 +198,6 @@
 //     useCreateIndex:true
 
 // })
-
 
 // const User=mongoose.model('User',{
 //     name :{
@@ -245,10 +227,6 @@
 //     }
 // })
 
-
-
-
-
 // const me=new User({
 //     name:'         Rajat   ',
 //     email:'RAJATJADON@google.com        '
@@ -260,7 +238,6 @@
 //     console.log('Error',error);
 // })
 
-
 //Practice with password field
 // const mongoose=require('mongoose')
 // const validator =require('validator')
@@ -269,7 +246,6 @@
 //     useCreateIndex:true
 
 // })
-
 
 // const User=mongoose.model('User',{
 //     name :{
@@ -310,7 +286,6 @@
 //     }
 // })
 
-
 //password with length<7
 // const me=new User({
 //     name:'         Rajat   ',
@@ -325,7 +300,6 @@
 //     password:'Password123'
 // })
 
-
 //passing valid password
 // const me=new User({
 //     name:'         Rajat   ',
@@ -333,13 +307,11 @@
 //     password:'rj123@yahoo'
 // })
 
-
 // me.save().then(() =>{
 //     console.log(me);
 // }).catch((error)=>{
 //     console.log('Error',error);
 // })
-
 
 //Practice Tasks Collection
 // const mongoose=require('mongoose')
@@ -349,7 +321,6 @@
 //     useCreateIndex:true
 
 // })
-
 
 // const Tasks=mongoose.model('Tasks',{
 //     description :{
@@ -367,7 +338,7 @@
 // // const task=new Tasks({
 // // })
 
-// //Providing description and not another field  
+// //Providing description and not another field
 // //trim only remove the first and last unwanted spaces
 // const task=new Tasks({
 //     description:'          Clean the             Room',
@@ -379,28 +350,28 @@
 //     console.log(error);
 // })
 
-
-
 //CONECTING MONGOOSE TO EXPRESS
 
 //Create Users
 
-const mongoose=require('mongoose')
-mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api',{
-    useNewUrlParser:true,
-    useCreateIndex:true,
-    useFindAndModify:false
-    ,useUnifiedTopology: true
-
-}).then(() => {
+const mongoose = require("mongoose");
+mongoose
+  .connect(
+    "mongodb+srv://rajatjadon701:rvoBsw1Mp69MJvqR@cluster0.xw9viqf.mongodb.net/task-manager-api",
+    {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => {
     console.log(`CONNECTED TO MONGO!`);
-})
-.catch((err) => {
+  })
+  .catch((err) => {
     console.log(`OH NO! MONGO CONNECTION ERROR!`);
     console.log(err);
-})
-
+  });
 
 //transfer the Users model in user.js file
 //transfer the Tasks model in task.js file
-
