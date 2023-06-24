@@ -1208,7 +1208,7 @@ require("./src/db/mongoose");
 const corsBrowser = require("cors");
 const io = new Server({
   cors: {
-    origin: "http://localhost:3000",
+    origin: true,
   },
 });
 
@@ -1253,7 +1253,7 @@ fileFilter(req , file, cb){
 app.use("/", express.static(path.join(__dirname, "client/excelClient/build")));
 console.log("Path Locar==>", path.join(__dirname, "client/excelClient/build"));
 app.use(express.static(path.join(__dirname, "public")));
-app.use(corsBrowser());
+app.use(corsBrowser({ origin: true }));
 app.use(express.json());
 ///we use it here//
 // app.use(userRouter)
