@@ -3,7 +3,7 @@ const express = require("express");
 const COLLECTION_USER = require("../db/models/COLLECTION_USER");
 const router = new express.Router();
 
-router.post("/register", async (req, res) => {
+router.post("/api/v1/register", async (req, res) => {
   const obj = req.body;
   // console.log("Test ===>", obj);
   try {
@@ -17,12 +17,10 @@ router.post("/register", async (req, res) => {
     };
     let result = await sheetDoc.find({ $and: [{ USERID: obj.userId }] });
     if (result && result.length > 0) {
-      res
-        .status(200)
-        .send({
-          result: "User with same UserId and Email is already Exist",
-          status: "failed",
-        });
+      res.status(200).send({
+        result: "User with same UserId and Email is already Exist",
+        status: "failed",
+      });
     } else {
       let resultCreated = await sheetDoc.create(insertObj);
       let finalResult = {
@@ -43,7 +41,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/api/v1/login", async (req, res) => {
   const userId = req.body.userId;
   const password = req.body.password;
   const email = req.body.email;
@@ -68,9 +66,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-
-
-router.get("/user/getAll", async (req, res) => {
+router.get("/api/v1/user/getAll", async (req, res) => {
   try {
     const sheetDoc = COLLECTION_USER;
     let result = await sheetDoc.find({});
