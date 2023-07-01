@@ -1200,17 +1200,18 @@
 // })
 
 //CROPPING AND IMAGE FORMATTING
-const { Server } = require("socket.io");
+// const { Server } = require("socket.io");
+const SOCKETIO = require("socket.io");
 const path = require("path");
 const express = require("express");
 const http = require("http");
 require("./src/db/mongoose");
 const corsBrowser = require("cors");
-const io = new Server({
-  cors: {
-    origin: true,
-  },
-});
+// const io = new Server({
+//   cors: {
+//     origin: true,
+//   },
+// });
 
 //for using the separate file router we create a user.js file in router folder and create the route
 // const userRouter =  require('./routers/user')
@@ -1263,6 +1264,13 @@ app.use(userSheetRouter);
 app.use(userLogin);
 ///setting the cors
 let onlineUser = [];
+const socketIO = SOCKETIO(appServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"],
+  },
+});
 const addNewUsers = (userId, socketId) => {
   if (onlineUser.some((user) => user.userId === userId)) {
     let index = onlineUser.findIndex((user) => user.userId === userId);
@@ -1288,10 +1296,49 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET , PUT , POST , DELETE");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   next();
 });
 
-io.on("connection", (socket) => {
+// io.on("connection", (socket) => {
+//   // console.log("Some One Has Connected",onlineUser);
+//   // io.emit("firstEvent","Hello this is first Event");
+
+//   // socket.on("newUser",(userName)=>{
+//   //   addNewUsers (userName,socket.id)
+
+//   // })
+//   socket.on("sendNotification", ({ updatedBy, receiverName, docName }) => {
+//     let message = `User with userId ${updatedBy} has Updated the Doc with Title ${docName} to get the updated information. Please refres the Application!`;
+//     io.emit("getNotification", {
+//       receiverName,
+//       message,
+//       updatedBy,
+//       docName,
+//     });
+//   });
+
+//   socket.on("deleteNotification", ({ updatedBy, receiverName, docName }) => {
+//     let message = `User with userId ${updatedBy} has Deleted the Doc with Title ${docName} that had been shared with you to get the updated information. Please refresh the Application!`;
+//     io.emit("getNotification", {
+//       receiverName,
+//       message,
+//       updatedBy,
+//       docName,
+//     });
+//   });
+//   socket.on("disconnect", () => {
+//     // console.log("SomeOne Has Disconnect");
+//     // removeUsers(socket.id);
+//   });
+// });
+
+socketIO.on("connection", (socket) => {
   // console.log("Some One Has Connected",onlineUser);
   // io.emit("firstEvent","Hello this is first Event");
 
@@ -1301,7 +1348,7 @@ io.on("connection", (socket) => {
   // })
   socket.on("sendNotification", ({ updatedBy, receiverName, docName }) => {
     let message = `User with userId ${updatedBy} has Updated the Doc with Title ${docName} to get the updated information. Please refres the Application!`;
-    io.emit("getNotification", {
+    socketIO.emit("getNotification", {
       receiverName,
       message,
       updatedBy,
@@ -1311,7 +1358,7 @@ io.on("connection", (socket) => {
 
   socket.on("deleteNotification", ({ updatedBy, receiverName, docName }) => {
     let message = `User with userId ${updatedBy} has Deleted the Doc with Title ${docName} that had been shared with you to get the updated information. Please refresh the Application!`;
-    io.emit("getNotification", {
+    socketIO.emit("getNotification", {
       receiverName,
       message,
       updatedBy,
@@ -1319,12 +1366,18 @@ io.on("connection", (socket) => {
     });
   });
   socket.on("disconnect", () => {
-    // console.log("SomeOne Has Disconnect");
+    console.log("SomeOne Has Disconnect");
     // removeUsers(socket.id);
   });
 });
 
-io.listen(5000);
+// io.listen(5000);
+// appServer.listen(port, () => {
+//   console.log("Server is Started on port: " + port);
+// });
+
+// socketIO.listen(5000);
+
 appServer.listen(port, () => {
   console.log("Server is Started on port: " + port);
 });
