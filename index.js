@@ -1371,6 +1371,11 @@ socketIO.on("connection", (socket) => {
   });
 });
 
+app.get("*", (req, res) => {
+  logger.info(`url - ${req.originalUrl}`);
+  res.sendFile(path.resolve(__dirname, "public/client/build/index.html"));
+});
+
 // io.listen(5000);
 // appServer.listen(port, () => {
 //   console.log("Server is Started on port: " + port);
