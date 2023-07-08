@@ -1372,7 +1372,6 @@ socketIO.on("connection", (socket) => {
 });
 
 app.get("*", (req, res) => {
-  logger.info(`url - ${req.originalUrl}`);
   res.sendFile(path.resolve(__dirname, "public/client/build/index.html"));
 });
 
