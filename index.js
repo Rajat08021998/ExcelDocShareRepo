@@ -1372,7 +1372,7 @@ socketIO.on("connection", (socket) => {
 });
 
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "public/client/build/index.html"));
+  res.sendFile(path.resolve(__dirname, "client/excelClient/build/index.html"));
 });
 
 // io.listen(5000);
