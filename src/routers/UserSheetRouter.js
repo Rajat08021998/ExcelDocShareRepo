@@ -2,6 +2,7 @@ const express = require("express");
 const Item = require("../db/models/item");
 
 const COLLECTION_FOR_USER_SHEET = require("../db/models/COLLECTON_FOR_USER_SHEET");
+const COLLECTION_DOC_HISTORY = require("../db/models/COLLECTION_DOC_HISTORY");
 const router = new express.Router();
 //item create
 router.post("/api/v1/doc", async (req, res) => {
@@ -108,6 +109,44 @@ router.get("/api/v1/doc/:type/:user", async (req, res) => {
 
 router.delete("/api/v1/doc/:id", async (req, res) => {
   try {
+    let id = req.params.id;
+    const fetch = await COLLECTION_FOR_USER_SHEET.findOne({ _id: id });
+    const history = await COLLECTION_DOC_HISTORY.create({
+      DOC_ID: id,
+      NEW_DOC_OBJ: JSON.stringify([]),
+      DOC_NAME:
+        fetch && Object.keys(fetch).length > 0 && fetch["DOC_NAME"]
+          ? fetch["DOC_NAME"]
+          : "TEST",
+      DOC_LABEL:
+        fetch && Object.keys(fetch).length > 0 && fetch["DOC_LABEL"]
+          ? fetch["DOC_LABEL"]
+          : "[]",
+      UPDATED_ON: new Date().getTime(),
+      UPDATED_BY:
+        fetch && Object.keys(fetch).length > 0 && fetch["CREATED_BY"]
+          ? fetch["CREATED_BY"]
+          : "",
+      PRE_DOC_OBJ:
+        fetch && Object.keys(fetch).length > 0 && fetch["DOC_OBJ"]
+          ? fetch["DOC_OBJ"]
+          : JSON.stringify([]),
+      OPERATION: "DELETE",
+      NOTE: "DOC DELETION",
+      CREATED_BY:
+        fetch && Object.keys(fetch).length > 0 && fetch["CREATED_BY"]
+          ? fetch["CREATED_BY"]
+          : "",
+      EDIT_LIST:
+        fetch && Object.keys(fetch).length > 0 && fetch["EDIT_LIST"]
+          ? fetch["EDIT_LIST"]
+          : [],
+      VIEW_LIST:
+        fetch && Object.keys(fetch).length > 0 && fetch["VIEW_LIST"]
+          ? fetch["VIEW_LIST"]
+          : [],
+    });
+
     const item = await COLLECTION_FOR_USER_SHEET.findByIdAndDelete(
       req.params.id
     );
@@ -131,8 +170,37 @@ router.delete("/api/v1/doc/:id", async (req, res) => {
 
 router.put("/api/v1/doc/:id", async (req, res) => {
   try {
-    const { DOC_OBJ, DOC_NAME, DOC_LABEL, UPDATED_BY } = req.body;
+    const { DOC_OBJ, DOC_NAME, DOC_LABEL, UPDATED_BY, OPERATION, NOTE } =
+      req.body;
     let id = req.params.id;
+    const fetch = await COLLECTION_FOR_USER_SHEET.findOne({ _id: id });
+    const history = await COLLECTION_DOC_HISTORY.create({
+      DOC_ID: id,
+      NEW_DOC_OBJ: JSON.stringify(DOC_OBJ),
+      DOC_NAME: DOC_NAME,
+      DOC_LABEL: JSON.stringify(DOC_LABEL),
+      UPDATED_ON: new Date().getTime(),
+      UPDATED_BY: UPDATED_BY,
+      PRE_DOC_OBJ:
+        fetch && Object.keys(fetch).length > 0 && fetch["DOC_OBJ"]
+          ? fetch["DOC_OBJ"]
+          : JSON.stringify([]),
+      OPERATION: OPERATION ? OPERATION : "UPDATE",
+      NOTE: NOTE ? NOTE : "",
+      CREATED_BY:
+        fetch && Object.keys(fetch).length > 0 && fetch["CREATED_BY"]
+          ? fetch["CREATED_BY"]
+          : "",
+      EDIT_LIST:
+        fetch && Object.keys(fetch).length > 0 && fetch["EDIT_LIST"]
+          ? fetch["EDIT_LIST"]
+          : [],
+      VIEW_LIST:
+        fetch && Object.keys(fetch).length > 0 && fetch["VIEW_LIST"]
+          ? fetch["VIEW_LIST"]
+          : [],
+    });
+
     const item = await COLLECTION_FOR_USER_SHEET.updateOne(
       { _id: id },
       {
@@ -205,4 +273,52 @@ router.put("/api/v1/doc/list/:id", async (req, res) => {
     res.status(500).send({ status: "failed", result: `Error in updated` });
   }
 });
+
+router.get("/api/v1/dochistory/:user", async (req, res) => {
+  try {
+    const type = req.params.type;
+    const user = req.params.user;
+    // console.log("================get API",type,user);
+
+    const item = await COLLECTION_DOC_HISTORY.find({
+      $or: [
+        { CREATED_BY: user },
+        { UPDATED_BY: user },
+        { EDIT_LIST: user },
+        { VIEW_LIST: user },
+      ],
+    }).sort({ updatedAt: -1 });
+    let result =
+      item && item.length > 0 ? JSON.parse(JSON.stringify(item)) : [];
+    result.length > 0 &&
+      result.forEach((i, index) => {
+        result[index]["DOC_LABEL"] = i.DOC_LABEL ? JSON.parse(i.DOC_LABEL) : [];
+        result[index]["PRE_DOC_OBJ"] = i.PRE_DOC_OBJ
+          ? JSON.parse(i.PRE_DOC_OBJ)
+          : [];
+        result[index]["NEW_DOC_OBJ"] = i.NEW_DOC_OBJ
+          ? JSON.parse(i.NEW_DOC_OBJ)
+          : [];
+        result[index]["CREATED_ON"] = i.CREATED_ON
+          ? new Date(i.CREATED_ON).toLocaleDateString("en-US")
+          : null;
+        result[index]["UPDATED_ON"] = i.UPDATED_ON
+          ? new Date(i.UPDATED_ON).toLocaleDateString("en-US")
+          : null;
+        result[index]["UPDATED_BY"] = i.UPDATED_BY ? i.UPDATED_BY : null;
+        result[index]["CREATED_BY"] = i.CREATED_BY ? i.CREATED_BY : null;
+        result[index]["OPERATION"] = i.OPERATION ? i.OPERATION : null;
+        result[index]["NOTE"] = i.NOTE ? i.NOTE : "";
+        result[index]["_id"] = i._id;
+        result[index]["EDIT_LIST"] = i.EDIT_LIST ? i.EDIT_LIST : [];
+        result[index]["VIEW_LIST"] = i.VIEW_LIST ? i.VIEW_LIST : [];
+      });
+    console.log("===>result", result);
+    res.send({ result: result, status: "success" });
+  } catch (error) {
+    // console.log("ERRROR==>", error);
+    res.status(500).send({ status: "failed", result: "error in getting data" });
+  }
+});
+
 module.exports = router;
